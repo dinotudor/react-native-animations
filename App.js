@@ -1,25 +1,23 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#61c123',
+    padding: 30,
   },
-  text: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#fff',
-    textAlign: 'center',
+  ball: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    backgroundColor: '#F00',
   },
 });
 
 function App() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>ANIMATIONS REACT NATIVE</Text>
+      <View style={styles.ball} />
     </View>
   );
 }
