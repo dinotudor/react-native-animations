@@ -1,5 +1,11 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, Animated, View} from 'react-native';
+
+// Components exported by Animated function:
+// Animated.View,
+// Animated.Text,
+// Animated.Image,
+// Animated.ScrollView
 
 const styles = StyleSheet.create({
   container: {
@@ -15,9 +21,20 @@ const styles = StyleSheet.create({
 });
 
 function App() {
+  state = {
+    ballY: Animated.Value(0),
+  }
+
+  componentDidMount() {
+    Animated.timing(this.state.ballY, {
+      toValues: 500,
+      duration: 1000,
+    });
+  }
+
   return (
     <View style={styles.container}>
-      <View style={styles.ball} />
+      <Animated.View style={styles.ball} />
     </View>
   );
 }
