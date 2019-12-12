@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {StyleSheet, Animated, View} from 'react-native';
+import React, { Component } from 'react';
+import { StyleSheet, Animated, View } from 'react-native';
 
 // Components exported by Animated function:
 // Animated.View,
@@ -27,16 +27,17 @@ export default class App extends Component {
   };
 
   componentDidMount() {
-    Animated.timing(this.state.ballY, {
-      toValue: 500,
-      duration: 1000,
+    const { ballY } = this.state;
+    Animated.spring(ballY, {
+      toValue: 300,
+      bounciness: 20,
     }).start();
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <Animated.View style={[styles.ball, {top: this.state.ballY}]} />
+        <Animated.View style={[styles.ball, { top: this.state.ballY }]} />
       </View>
     );
   }
