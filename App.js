@@ -21,10 +21,14 @@ const styles = StyleSheet.create({
   },
 });
 
+const ballY = new Animated.Value(0);
+const ballX = Animated.divide(ballY, 2);
+
 export default class App extends Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
-    ballY: new Animated.Value(0),
+    ballY: ballY,
+    ballX: ballX,
   };
 
   componentDidMount() {
@@ -37,9 +41,10 @@ export default class App extends Component {
 
   render() {
     const { ballY } = this.state;
+    const { ballX } = this.state;
     return (
       <View style={styles.container}>
-        <Animated.View style={[styles.ball, { top: ballY }]} />
+        <Animated.View style={[styles.ball, { top: ballY, left: ballX }]} />
       </View>
     );
   }
