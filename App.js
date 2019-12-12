@@ -21,22 +21,31 @@ const styles = StyleSheet.create({
   },
 });
 
-const ballY = new Animated.Value(0);
-const ballX = Animated.divide(ballY, 2);
-
 export default class App extends Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
-    ballY: ballY,
-    ballX: ballX,
+    ballY: new Animated.Value(0),
+    ballX: new Animated.Value(0),
   };
 
   componentDidMount() {
-    const { ballY } = this.state;
-    Animated.spring(ballY, {
-      toValue: 300,
-      bounciness: 20,
-    }).start();
+    const { ballY, ballX } = this.state;
+    // Animated.sequence - chaining of animations
+    // Animated.parellel - Executes all animations in array simultaneosly
+    // Animated.stagger - first parameter is a delay between animations inside array
+
+    Animated.sequence([
+      Animated.spring(ballY, {
+        toValue: 400,
+        bounciness: 15,
+      }),
+      Animated.delay(200),
+
+      Animated.timing(ballX, {
+        toValue: 100,
+        duration: 500,
+      }),
+    ]).start();
   }
 
   render() {
