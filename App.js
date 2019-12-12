@@ -7,19 +7,6 @@ import {StyleSheet, Animated, View} from 'react-native';
 // Animated.Image,
 // Animated.ScrollView
 
-export default class App extends Component {
-  componentDidMount() {
-    Animated.timing();
-  }
-  render() {
-    return (
-      <View style={styles.container}>
-        <Animated.View style={styles.ball} />
-      </View>
-    );
-  }
-}
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -32,3 +19,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#F00',
   },
 });
+
+export default class App extends Component {
+  // eslint-disable-next-line react/state-in-constructor
+  state = {
+    ballY: new Animated.Value(0),
+  };
+
+  componentDidMount() {
+    Animated.timing(this.state.ballY, {
+      toValue: 500,
+      duration: 1000,
+    }).start();
+  }
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <Animated.View style={[styles.ball, {top: this.state.ballY}]} />
+      </View>
+    );
+  }
+}
