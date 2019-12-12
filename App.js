@@ -10,7 +10,8 @@ import { StyleSheet, Animated, View } from 'react-native';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 30,
+    padding: 20,
+    alignItems: 'center',
   },
   ball: {
     width: 70,
@@ -35,9 +36,10 @@ export default class App extends Component {
   }
 
   render() {
+    const { ballY } = this.state;
     return (
       <View style={styles.container}>
-        <Animated.View style={[styles.ball, { top: this.state.ballY }]} />
+        <Animated.View style={[styles.ball, { top: ballY }]} />
       </View>
     );
   }
