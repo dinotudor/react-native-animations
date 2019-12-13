@@ -24,38 +24,49 @@ const styles = StyleSheet.create({
 export default class App extends Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
-    ballY: new Animated.Value(0),
+    ball: new Animated.ValueXY({ x: 0, y: 0 }),
     // ballX: new Animated.Value(0),
   };
 
-  componentDidMount() {
-    const { ballY } = this.state;
-    // Animated.sequence - chaining of animations
-    // Animated.parellel - Executes all animations in array simultaneosly
-    // Animated.stagger - first parameter is a delay between animations inside array
-    // Animated.delay(amount) - delay between animations
-    // Animated.loop() - enclose all chaining to loop the array
-    Animated.timing(ballY, {
-      toValue: 500,
-      duration: 1000,
-    }).start();
+  componentWillMount() {
+    const { ball } = this.state;
+    this._panResponder = PanResponder.create({
+      onMoveShouldSetPanResponder: (e, gestureState) => true,
+
+      onPanResponderMove: Animated.event([
+        null,
+        {
+          dx: ball.x,
+          dy: ball.y,
+        },
+      ]),
+    });
   }
 
+  // componentDidMount() {
+  //   const { ballY } = this.state;
+  // Animated.sequence - chaining of animations
+  // Animated.parellel - Executes all animations in array simultaneosly
+  // Animated.stagger - first parameter is a delay between animations inside array
+  // Animated.delay(amount) - delay between animations
+  // Animated.loop() - enclose all chaining to loop the array
+  //    Animated.timing(ballY, {
+  //      toValue: 500,
+  //      duration: 1000,
+  //    }).start();
+  //  }
+
   render() {
-    const { ballY } = this.state;
+    const { ball } = this.state;
     // const { ballX } = this.state;
     return (
       <View style={styles.container}>
         <Animated.View
+          {...this._panResponder.panHandlers}
           style={[
             styles.ball,
             {
-              top: ballY,
-              opacity: ballY.interpolate({
-                inputRange: [0, 300],
-                outputRange: [1, 0.2],
-                extrapolate: 'clamp',
-              }),
+              transform: [{ translateX: ball.x }, { translateY: ball.y }],
             },
           ]}
         />
