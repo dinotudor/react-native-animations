@@ -25,35 +25,39 @@ export default class App extends Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
     ballY: new Animated.Value(0),
-    ballX: new Animated.Value(0),
+    // ballX: new Animated.Value(0),
   };
 
   componentDidMount() {
-    const { ballY, ballX } = this.state;
+    const { ballY } = this.state;
     // Animated.sequence - chaining of animations
     // Animated.parellel - Executes all animations in array simultaneosly
     // Animated.stagger - first parameter is a delay between animations inside array
-
-    Animated.sequence([
-      Animated.spring(ballY, {
-        toValue: 400,
-        bounciness: 15,
-      }),
-      Animated.delay(200),
-
-      Animated.timing(ballX, {
-        toValue: 100,
-        duration: 500,
-      }),
-    ]).start();
+    // Animated.delay(amount) - delay between animations
+    // Animated.loop() - enclose all chaining to loop the array
+    Animated.timing(ballY, {
+      toValue: 400,
+      duration: 1000,
+    }).start();
   }
 
   render() {
     const { ballY } = this.state;
-    const { ballX } = this.state;
+    // const { ballX } = this.state;
     return (
       <View style={styles.container}>
-        <Animated.View style={[styles.ball, { top: ballY, left: ballX }]} />
+        <Animated.View
+          style={[
+            styles.ball,
+            {
+              top: ballY,
+              opacity: ballY.interpolate({
+                inputRange: [0, 300],
+                outputRange: [1, 0],
+              }),
+            },
+          ]}
+        />
       </View>
     );
   }
