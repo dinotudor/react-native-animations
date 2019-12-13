@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Animated, View } from 'react-native';
+import { StyleSheet, Animated, View, PanResponder } from 'react-native';
 
 // Components exported by Animated function:
 // Animated.View,
