@@ -36,7 +36,7 @@ export default class App extends Component {
     // Animated.delay(amount) - delay between animations
     // Animated.loop() - enclose all chaining to loop the array
     Animated.timing(ballY, {
-      toValue: 400,
+      toValue: 500,
       duration: 1000,
     }).start();
   }
@@ -53,7 +53,8 @@ export default class App extends Component {
               top: ballY,
               opacity: ballY.interpolate({
                 inputRange: [0, 300],
-                outputRange: [1, 0],
+                outputRange: [1, 0.2],
+                extrapolate: 'clamp',
               }),
             },
           ]}
