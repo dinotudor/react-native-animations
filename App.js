@@ -33,13 +33,32 @@ export default class App extends Component {
     this._panResponder = PanResponder.create({
       onMoveShouldSetPanResponder: (e, gestureState) => true,
 
-      onPanResponderMove: Animated.event([
-        null,
+      onPanResponderGrant: (e, gestureState) => {
+        ball.setOffset({
+          x: ball.x._value,
+          y: ball.y._value,
+        });
+
+        ball.setValue({ x: 0, y: 0 });
+      },
+
+      onPanResponderMove: Animated.event(
+        [
+          null,
+          {
+            dx: ball.x,
+            dy: ball.y,
+          },
+        ],
         {
-          dx: ball.x,
-          dy: ball.y,
+          listener: (e, gestureState) => {
+            console.log(gestureState);
+          },
         },
-      ]),
+      ),
+      onPanResponderRelease: () => {
+        ball.flattenOffset();
+      },
     });
   }
 
