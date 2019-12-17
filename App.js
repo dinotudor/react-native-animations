@@ -1,95 +1,140 @@
 import React, { Component } from 'react';
-import { StyleSheet, Animated, View, PanResponder } from 'react-native';
 
-// Components exported by Animated function:
-// Animated.View,
-// Animated.Text,
-// Animated.Image,
-// Animated.ScrollView
+import {
+  View,
+  Image,
+  Text,
+  Platform,
+  StatusBar,
+  StyleSheet,
+  Dimensions,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    alignItems: 'center',
-  },
-  ball: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    backgroundColor: '#F00',
-  },
-});
+import User from './components/User';
+
+const { width } = Dimensions.get('window');
 
 export default class App extends Component {
-  // eslint-disable-next-line react/state-in-constructor
   state = {
-    ball: new Animated.ValueXY({ x: 0, y: 0 }),
-    // ballX: new Animated.Value(0),
+    userSelected: null,
+    userInfoVisible: false,
+    users: [
+      {
+        id: 1,
+        name: 'Diego Fernandes',
+        description: 'Head de programação!',
+        avatar: 'https://avatars0.githubusercontent.com/u/2254731?s=460&v=4',
+        thumbnail:
+          'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=400&q=80',
+        likes: 200,
+        color: '#57BCBC',
+      },
+      {
+        id: 2,
+        name: 'Robson Marques',
+        description: 'Head de empreendedorismo!',
+        avatar: 'https://avatars2.githubusercontent.com/u/861751?s=460&v=4',
+        thumbnail:
+          'https://images.unsplash.com/photo-1490633874781-1c63cc424610?auto=format&fit=crop&w=400&q=80',
+        likes: 350,
+        color: '#E75A63',
+      },
+      {
+        id: 3,
+        name: 'Cleiton Souza',
+        description: 'Head de mindset!',
+        avatar: 'https://avatars0.githubusercontent.com/u/4669899?s=460&v=4',
+        thumbnail:
+          'https://images.unsplash.com/photo-1506440905961-0ab11f2ed5bc?auto=format&fit=crop&w=400&q=80',
+        likes: 250,
+        color: '#2E93E5',
+      },
+      {
+        id: 4,
+        name: 'Robson Marques',
+        description: 'Head de empreendedorismo!',
+        avatar: 'https://avatars2.githubusercontent.com/u/861751?s=460&v=4',
+        thumbnail:
+          'https://images.unsplash.com/photo-1490633874781-1c63cc424610?auto=format&fit=crop&w=400&q=80',
+        likes: 350,
+        color: '#E75A63',
+      },
+    ],
   };
 
-  componentWillMount() {
-    const { ball } = this.state;
-    this._panResponder = PanResponder.create({
-      onMoveShouldSetPanResponder: (e, gestureState) => true,
+  selectUser = user => {
+    this.setState({ userSelected: user });
+    this.setState({ userInfoVisible: true });
+  };
 
-      onPanResponderGrant: (e, gestureState) => {
-        ball.setOffset({
-          x: ball.x._value,
-          y: ball.y._value,
-        });
+  renderDetail = () => (
+    <View>
+      <User user={this.state.userSelected} onPress={() => {}} />
+    </View>
+  );
 
-        ball.setValue({ x: 0, y: 0 });
-      },
-
-      onPanResponderMove: Animated.event(
-        [
-          null,
-          {
-            dx: ball.x,
-            dy: ball.y,
-          },
-        ],
-        {
-          listener: (e, gestureState) => {
-            console.log(gestureState);
-          },
-        },
-      ),
-      onPanResponderRelease: () => {
-        ball.flattenOffset();
-      },
-    });
-  }
-
-  // componentDidMount() {
-  //   const { ballY } = this.state;
-  // Animated.sequence - chaining of animations
-  // Animated.parellel - Executes all animations in array simultaneosly
-  // Animated.stagger - first parameter is a delay between animations inside array
-  // Animated.delay(amount) - delay between animations
-  // Animated.loop() - enclose all chaining to loop the array
-  //    Animated.timing(ballY, {
-  //      toValue: 500,
-  //      duration: 1000,
-  //    }).start();
-  //  }
+  renderList = () => (
+    <View style={styles.container}>
+      <ScrollView>
+        {this.state.users.map(user => (
+          <User
+            key={user.id}
+            user={user}
+            onPress={() => this.selectUser(user)}
+          />
+        ))}
+      </ScrollView>
+    </View>
+  );
 
   render() {
-    const { ball } = this.state;
-    // const { ballX } = this.state;
+    const { userSelected } = this.state;
+
     return (
       <View style={styles.container}>
-        <Animated.View
-          {...this._panResponder.panHandlers}
-          style={[
-            styles.ball,
-            {
-              transform: [{ translateX: ball.x }, { translateY: ball.y }],
-            },
-          ]}
-        />
+        <StatusBar barStyle="light-content" />
+
+        <View style={styles.header}>
+          <Image
+            style={styles.headerImage}
+            source={userSelected ? { uri: userSelected.thumbnail } : null}
+          />
+
+          <Text style={styles.headerText}>
+            {userSelected ? userSelected.name : 'GoNative'}
+          </Text>
+        </View>
+        {this.state.userInfoVisible ? this.renderDetail() : this.renderList()}
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+
+  header: {
+    paddingTop: Platform.OS === 'ios' ? 40 : 20,
+    paddingHorizontal: 15,
+    backgroundColor: '#2E93E5',
+    height: 200,
+  },
+
+  headerImage: {
+    ...StyleSheet.absoluteFillObject,
+  },
+
+  headerText: {
+    fontSize: 24,
+    fontWeight: '900',
+    color: '#FFF',
+    backgroundColor: 'transparent',
+    position: 'absolute',
+    left: 15,
+    bottom: 20,
+  },
+});
